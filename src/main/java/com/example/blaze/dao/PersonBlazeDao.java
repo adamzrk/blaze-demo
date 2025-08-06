@@ -24,6 +24,7 @@ public class PersonBlazeDao {
                 .where("lastName").eq(name);
 
         return entityViewManager.applySetting(EntityViewSetting.create(PersonView.class), criteriaBuilder)
+                .orderByAsc("lastName")
                 .getResultList();
     }
 
