@@ -21,7 +21,10 @@ public class PersonBlazeDao {
 
     public List<PersonView> findByName(String name) {
         var criteriaBuilder = criteriaBuilderFactory.create(entityManager, Person.class)
-                .where("lastName").eq(name);
+                .whereOr()
+                    .where("lastName").eq(name)
+                    .where("firstName").eq(name)
+                .endOr();
 
         return entityViewManager.applySetting(EntityViewSetting.create(PersonView.class), criteriaBuilder)
                 .getResultList();
