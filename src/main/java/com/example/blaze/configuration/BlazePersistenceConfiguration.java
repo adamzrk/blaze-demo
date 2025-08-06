@@ -3,6 +3,7 @@ package com.example.blaze.configuration;
 import com.blazebit.persistence.Criteria;
 import com.blazebit.persistence.CriteriaBuilderFactory;
 import com.blazebit.persistence.spi.CriteriaBuilderConfiguration;
+import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.EntityViewManager;
 import com.blazebit.persistence.view.EntityViews;
 import com.blazebit.persistence.view.spi.EntityViewConfiguration;
@@ -14,6 +15,9 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceUnit;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.reflections.Reflections;
+
+import java.util.Set;
 
 @Configuration
 public class BlazePersistenceConfiguration {
@@ -33,12 +37,11 @@ public class BlazePersistenceConfiguration {
     }
 
     @Bean
-    public EntityViewConfiguration entityViewSettings() {
+    public EntityViewConfiguration entityViewSettings() throws ClassNotFoundException {
         EntityViewConfiguration config = EntityViews.createDefaultConfiguration();
-        config.addEntityView(CountryView.class);
-        config.addEntityView(AddressView.class);
-        config.addEntityView(TelephoneView.class);
-        config.addEntityView(PersonView.class);
+        Reflections reflections = new Reflections(CountryView.class.getPackage().getName());
+        Set<Class<?>> entityViews = reflections.getTypesAnnotatedWith(EntityView.class);
+        entityViews.forEach(entityView -> config.addEntityView(entityView));
         return config;
     }
 }

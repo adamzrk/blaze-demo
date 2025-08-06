@@ -96,6 +96,11 @@
 			<artifactId>blaze-persistence-integration-hibernate-6.2</artifactId>
 			<version>${blaze.persistence.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -104,7 +109,23 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-<!--			<plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.38</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+			<!--<plugin>
 				<groupId>org.bsc.maven</groupId>
 				<artifactId>maven-processor-plugin</artifactId>
 				<executions>
@@ -114,7 +135,7 @@
 						</goals>
 						<phase>generate-sources</phase>
 						<configuration>
-							<compilerArguments>-AaddGeneratedAnnotation=false</compilerArguments> &lt;!&ndash; suppress java.annotation &ndash;&gt;
+							<compilerArguments>-AaddGeneratedAnnotation=false</compilerArguments>
 							<processors>
 								<processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
 							</processors>
